@@ -1,10 +1,11 @@
 package com.springboot.mockapiproject.response;
 
-import com.springboot.mockapiproject.DTO.ApiDTO;
 import lombok.Data;
+
+import java.util.Map;
 
 @Data
 public class ApiResponse {
-    private Long Id;
-    private ApiDTO apiDTO;
+    private Map<String, Object> response;
+    private Map<String, Object> data;
 }

@@ -6,6 +6,7 @@ import com.springboot.mockapiproject.entity.MockProject;
 import com.springboot.mockapiproject.entity.converter.HashMapConverter;
 import com.springboot.mockapiproject.repository.DataRepository;
 import com.springboot.mockapiproject.repository.EndPointRepository;
+import com.springboot.mockapiproject.response.ApiResponse;
 import com.springboot.mockapiproject.service.MockApiService;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,33 @@ public class MockApiServiceImpl implements MockApiService {
             dataEntry.put("id", data.getId());
             return dataEntry;
         }
+
+        return null;
+    }
+
+    @Override
+    public ApiResponse mockApiPost(String url, Map<String, Object> dataEntry) {
+
+        EndPoint endPoint = endPointRepository.findEndPointByUrl(url);
+
+        if (Objects.equals(endPoint.getOperation(), "POST")) {
+            Data data = new Data();
+            data.setMockProject(endPoint.getMockProject());
+            data.setDataEntry(dataEntry);
+            data.setDataJson(hashMapConverter.convertToDatabaseColumn(dataEntry));
+
+            Data data1 = dataRepository.save(data);
+
+            Map<String, Object> dataResponse = hashMapConverter.convertToEntityAttribute(data1.getDataJson());
+            dataResponse.put("id", data1.getId());
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.setResponse(hashMapConverter.convertToEntityAttribute(endPoint.getResponses().get(0).getResponseJson()));
+            apiResponse.setData(dataResponse);
+
+            return apiResponse;
+        }
+
 
         return null;
     }

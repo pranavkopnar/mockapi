@@ -1,11 +1,10 @@
 package com.springboot.mockapiproject.controller;
 
+import com.springboot.mockapiproject.response.ApiResponse;
 import com.springboot.mockapiproject.service.impl.MockApiServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -53,14 +52,14 @@ public class MockApiController {
 
     }
 
-//    @PostMapping("/**")
-//    public ResponseEntity<?> mockAPI2(HttpServletRequest request, @RequestBody Map<String, Object> data) {
-//        Map<String, Object> response = mockApiService.mockApi(request.getRequestURI().split(request.getContextPath() + "/api/v1/")[1], "POST");
-//
-//        if (response == null) {
-//            return new ResponseEntity<>("Cannot save data", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @PostMapping("/**")
+    public ResponseEntity<?> mockAPI2(HttpServletRequest request, @RequestBody Map<String, Object> data) {
+        ApiResponse response = mockApiService.mockApiPost(request.getRequestURI().split(request.getContextPath() + "/api/v1/")[1], data);
+
+        if (response == null) {
+            return new ResponseEntity<>("Cannot save data", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
